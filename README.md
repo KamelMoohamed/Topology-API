@@ -7,6 +7,7 @@
   <li><a href="#ins">Installation</a></li>
   <li><a href="#run">Running</a></li>
   <li><a href="#te">Tests</a>
+  <li><a href="#do">Documentation Rules</a>
 </ul>
 
 <a id="des"></a>
@@ -89,3 +90,12 @@ excutablefile.exe
 
 \
 ![Exit](./readme_source/9.PNG)
+
+<br>
+
+<a id="do"></a>
+
+## Documentation Rules
+
+- Please Download The Documentation Folder.
+- Then Open the file `index.html` to view the documentation.
