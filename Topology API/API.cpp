@@ -1,8 +1,5 @@
 #include "API.h"
-#include "json.hpp"
-#include <fstream>
-#include "component.h"
-#include "Device.h"
+
 
 Topology_API::Topology_API() {
 
@@ -12,8 +9,8 @@ void Topology_API::readJSON(string FilePath) {
 fstream file(FilePath);
     try {
         nlohmann::json jsonFile = nlohmann::json::parse(file);
-        topology_list topology;
-        topology.setId(jsonFile["id"]);
+        topology Topology;
+        Topology.setId(jsonFile["id"]);
         for(int i = 0; i<jsonFile["components"].size(); i++){
             if(jsonFile["components"][i]["type"] == "resistor"){
                 device *Device = new device(jsonFile["components"][i]["resistance"]["default"],
@@ -27,7 +24,7 @@ fstream file(FilePath);
                 component *comp = new component("resistor",
                                                 jsonFile["components"][i]["id"],
                                                 *Device, netList);
-                topology.addComponent(comp);
+                Topology.addComponent(comp);
             }else{
 
                 device *Device = new device(jsonFile["components"][i]["m(l)"]["default"],
@@ -46,10 +43,10 @@ fstream file(FilePath);
 
 
 
-                topology.addComponent(comp);
+                Topology.addComponent(comp);
             }
         }
-        Topologies.push_back(topology);
+        Topologies.push_back(Topology);
     }catch (exception){
         cout << "Invalid to read the file...";
     }
@@ -64,8 +61,8 @@ void Topology_API::writeJSON(string topologyID) {
     string filePath;
     cin >> filePath;
 
-    ofstream o(filePath);
-    topology_list Topology;
+    ofstream output(filePath);
+    topology Topology;
     bool Found = false;
     for(int i=0; i<Topologies.size(); i++){
         if(Topologies[i].getID() == topologyID){
@@ -78,73 +75,74 @@ void Topology_API::writeJSON(string topologyID) {
 
     // Writing the topology to a JSON File
     if(Found) {
-        o << "{\n";
-        o << R"( "id": ")" + Topology.getID() + + R"(",)" + "\n";
-        o << R"( "components" :[)";
-        o << "\n";
+        output << "{\n";
+        output << R"( "id": ")" + Topology.getID() + + R"(",)" + "\n";
+        output << R"( "components" :[)";
+        output << "\n";
         vector<component> components = Topology.getComponents();
         for(int i=0; i<components.size(); i++){
             if(i != 0){
-                o << ",\n";
+                output << ",\n";
             }
-            o << "\t{\n\t";
-            o << R"("type": )";
+            output << "\t{\n\t";
+            output << R"("type": )";
             if(components[i].getType() == "resistor"){
-                o << "\"" + components[i].getType() + "\",\n\t";
-                o << R"("id": ")";
-                o << components[i].getID() << "\",\n\t";
-                o << R"("resistance": {)";
-                o << "\n\t\t";
-                o << R"("default": )" << components[i].getDevice().getDefault() << ",\n\t\t";
-                o << R"("min": )" << components[i].getDevice().getMin() << ",\n\t\t";
-                o << R"("max": )" << components[i].getDevice().getMax() << "\n\t\t";
-                o << "},\n\t\t";
-                o << R"("netlist": {)";
+                output << "\"" + components[i].getType() + "\",\n\t";
+                output << R"("id": ")";
+                output << components[i].getID() << "\",\n\t";
+                output << R"("resistance": {)";
+                output << "\n\t\t";
+                output << R"("default": )" << components[i].getDevice().getDefault() << ",\n\t\t";
+                output << R"("min": )" << components[i].getDevice().getMin() << ",\n\t\t";
+                output << R"("max": )" << components[i].getDevice().getMax() << "\n\t\t";
+                output << "},\n\t\t";
+                output << R"("netlist": {)";
                 unordered_map<string, string> netList = components[i].getNetlist();
                 int count = 1;
                 for(auto j: netList){
-                    o << "\"" + j.first + "\": \"" + j.second + "\"";
+                    output << "\"" + j.first + "\": \"" + j.second + "\"";
                     if(count != netList.size()){
-                        o << ",\n\t\t";
+                        output << ",\n\t\t";
                     }
                     count++;
                 }
-                o << "}\n}";
+                output << "}\n}";
             }else{
-                o << "\"" + components[i].getType() + "\",\n\t";
-                o << R"("id": ")";
-                o << components[i].getID() << "\",\n\t";
-                o << "\"m(l)\": {\n\t\t";
-                o << R"("default": )" << components[i].getDevice().getDefault() << ",\n\t\t";
-                o << R"("min": )" << components[i].getDevice().getMin() << ",\n\t\t";
-                o << R"("max": )" << components[i].getDevice().getMax() << "\n\t";
-                o << "},";
-                o << R"("netlist": {)";
+                output << "\"" + components[i].getType() + "\",\n\t";
+                output << R"("id": ")";
+                output << components[i].getID() << "\",\n\t";
+                output << "\"m(l)\": {\n\t\t";
+                output << R"("default": )" << components[i].getDevice().getDefault() << ",\n\t\t";
+                output << R"("min": )" << components[i].getDevice().getMin() << ",\n\t\t";
+                output << R"("max": )" << components[i].getDevice().getMax() << "\n\t";
+                output << "},";
+                output << R"("netlist": {)";
                 unordered_map<string, string> netList = components[i].getNetlist();
                 int count = 1;
                 for(auto j: netList){
-                    o << "\"" + j.first + "\": \"" + j.second + "\"";
+                    output << "\"" + j.first + "\": \"" + j.second + "\"";
                     if(count != netList.size()){
-                        o << ",\n\t\t";
+                        output << ",\n\t\t";
                     }
                     count++;
                 }
-                o << "}\n\t}";
+                output << "}\n\t}";
             }
         }
-        o << "\n]\n}";
+        output << "\n]\n}";
+        cout << "\n Successfully Wrote topology to the file";
     }else{
         cout << "\nThere is no topologies with that ID...";
     }
 }
 
-vector<topology_list> Topology_API::queryTopologies() {
+vector<topology> Topology_API::queryTopologies() {
     return Topologies;
 }
 
-topology_list Topology_API::deleteTopology(string topologyID) {
+topology Topology_API::deleteTopology(string topologyID) {
     bool Found = false;
-    topology_list Topo;
+    topology Topo;
     for(int i=0; i<Topologies.size(); i++){
         if(Topologies[i].getID() == topologyID){
             Topo = Topologies[i];
@@ -157,15 +155,19 @@ topology_list Topology_API::deleteTopology(string topologyID) {
             Topologies.pop_back();
         }
     }
-    if(Found)
+    if(Found) {
+        cout << "\nSuccessfully Deleted the topology from the memory...\n";
         return Topo;
-    else
+    }
+    else{
+        cout << "\nNo Topology with that ID...\n";
         return {};
+    }
 }
 
 vector<device> Topology_API::queryDevices(string topologyID) {
     bool Found = false;
-    topology_list Topology;
+    topology Topology;
     vector<component> outputDevices;
     for(int i=0; i<Topologies.size(); i++){
         if(Topologies[i].getID() == topologyID){
@@ -187,7 +189,7 @@ vector<device> Topology_API::queryDevices(string topologyID) {
 
 vector<device> Topology_API::queryDevicesWithNetlistNode(string topologyID, string netListID) {
     bool Found = false;
-    topology_list Topology;
+    topology Topology;
     vector<device> outputDevices;
     for(int i=0; i<Topologies.size(); i++){
         if(Topologies[i].getID() == topologyID){

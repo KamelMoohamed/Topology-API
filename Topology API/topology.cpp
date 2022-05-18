@@ -1,18 +1,18 @@
 #include "topology.h"
 
 
-void topology_list::setId(string id) {
+void topology::setId(string id) {
     this->id = id;
 }
 
-void topology_list::addComponent(component *comp) {
+void topology::addComponent(component *comp) {
     components.push_back(*comp);
 }
 
-string topology_list::getID() {
+string topology::getID() {
     return this->id;
 }
 
-vector<component> topology_list::getComponents() {
+vector<component> topology::getComponents() {
     return components;
 }

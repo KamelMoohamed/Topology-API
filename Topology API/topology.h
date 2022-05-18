@@ -5,7 +5,7 @@
 #include "component.h"
 using namespace std;
 
-class topology_list {
+class topology {
 private:
     string id;
     vector<component> components;

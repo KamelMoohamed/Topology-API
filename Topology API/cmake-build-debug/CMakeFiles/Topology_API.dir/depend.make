@@ -19,6 +19,7 @@ CMakeFiles/Topology_API.dir/main.cpp.obj: \
  ../API.h \
  ../Device.h \
  ../component.h \
+ ../json.hpp \
  ../main.cpp \
  ../topology.h
 CMakeFiles/Topology_API.dir/topology.cpp.obj: \
