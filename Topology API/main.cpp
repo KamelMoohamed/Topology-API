@@ -1,10 +1,21 @@
 #include <iostream>
 #include "API.h"
+#include "test.h"
 using namespace std;
 void useAPI();
 
 int main() {
     useAPI();
+
+    // Test Code
+
+//    test *Test =  new test();
+//    Test->readTestQuery();
+//    Test->writeTestQuery();
+//    Test->deleteTestQuery();
+//    Test->queryTopologiesTest();
+//    Test->queryDevicesTest();
+//    Test->queryDevicesWithNetlistTest();
 }
 
 void useAPI(){

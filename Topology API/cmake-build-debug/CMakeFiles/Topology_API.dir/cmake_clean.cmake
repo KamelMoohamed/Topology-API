@@ -3,6 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/Topology_API.dir/Device.cpp.obj"
   "CMakeFiles/Topology_API.dir/component.cpp.obj"
   "CMakeFiles/Topology_API.dir/main.cpp.obj"
+  "CMakeFiles/Topology_API.dir/test.cpp.obj"
   "CMakeFiles/Topology_API.dir/topology.cpp.obj"
   "Topology_API.exe"
   "Topology_API.exe.manifest"

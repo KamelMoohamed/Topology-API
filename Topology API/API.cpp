@@ -5,7 +5,7 @@ Topology_API::Topology_API() {
 
 }
 
-void Topology_API::readJSON(string FilePath) {
+bool Topology_API::readJSON(string FilePath) {
 fstream file(FilePath);
     try {
         nlohmann::json jsonFile = nlohmann::json::parse(file);
@@ -40,22 +40,21 @@ fstream file(FilePath);
                                                 jsonFile["components"][i]["id"],
                                                 *Device, netList);
 
-
-
-
                 Topology.addComponent(comp);
             }
         }
         Topologies.push_back(Topology);
+        return true;
     }catch (exception){
         cout << "Invalid to read the file...";
+        return false;
     }
 }
 
-void Topology_API::writeJSON(string topologyID) {
+bool Topology_API::writeJSON(string topologyID) {
     if(Topologies.size() == 0){
         cout << "\nThere is no topologies to write...";
-        return;
+        return false;
     }
     cout << "Please enter the file path and name (with extension .json): ";
     string filePath;
@@ -131,8 +130,10 @@ void Topology_API::writeJSON(string topologyID) {
         }
         output << "\n]\n}";
         cout << "\n Successfully Wrote topology to the file";
+        return true;
     }else{
         cout << "\nThere is no topologies with that ID...";
+        return false;
     }
 }
 
@@ -216,4 +217,8 @@ vector<device> Topology_API::queryDevicesWithNetlistNode(string topologyID, stri
     }else{
         return {};
     }
+}
+
+int Topology_API::getTopologiesNumber() {
+    return Topologies.size();
 }
